@@ -1,0 +1,22 @@
+name: Generate RSS Feed
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 * * * *'  # 每小时自动运行一次
+jobs:
+  generate-rss:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate RSS
+        run: |
+          # 用脚本（Python/Node.js）解析 Markdown 并生成 feed.xml
+          python generate_rss.py
+      - name: Commit and Push
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add feed.xml
+          git commit -m "Update RSS feed"
+          git push
